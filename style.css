@@ -1,0 +1,19 @@
+* {
+	 box-sizing: border-box;
+	 margin: 0;
+	 padding: 0;
+}
+
+body {
+	min-height: 100svh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#game-canvas {
+	min-height: 90svh;
+	min-width: 90vw;
+	border: 1px solid black;
+}
+
