@@ -14,6 +14,6 @@ body {
 #game-canvas {
 	min-height: 90svh;
 	min-width: 90vw;
-	border: 1px solid black;
+	background: black;
 }
 
