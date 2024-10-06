@@ -7,7 +7,7 @@ drawPlayer1();
 drawPlayer2();
 drawCentralLine();
 drawScores();
-generateBall();
+setBallFirstLineMvt();
 
 function drawCentralLine() {
 	context.beginPath();
@@ -65,8 +65,30 @@ function generateBall() {
 	context.lineWidth = 2;
 	context.arc(x, y, radius, 0, 2 * Math.PI);
 	context.stroke();
+	
+	return y;
 }
 
 function setBallFirstLineMvt() {
-	// code here
+	const startX = canvasGame.width / 2;
+	const startY = generateBall();
+	const finishY = Math.floor(Math.random() * (canvasGame.height + 1));
+	const finishX = (finishY === 0 || finishY === canvasGame.height) ? Math.floor(Math.random() * (startX + 1)) : 0;
+
+	context.beginPath();
+	context.strokeStyle = "yellow";
+	context.lineWidth = 2;
+	context.moveTo(startX, startY);
+	context.lineTo(finishX, finishY);
+	context.stroke();
+
+	return { startY, finishX, finishY };
+}
+
+function moveBall() {
+	const cood = setBallFirstLineMvt();
+	let x = canvasGame.width / 2;
+	let y = cood.startY;
+
+	// while
 }
