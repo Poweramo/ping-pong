@@ -3,11 +3,17 @@ const canvasHeight = canvasGame.height;
 const canvasWidth = canvasGame.width;
 const context = canvasGame.getContext("2d");
 
-drawPlayer1();
-drawPlayer2();
-drawCentralLine();
-drawScores();
-setBallFirstLineMvt();
+moveBall();
+
+function drawEverything(circleX, circleY, mvtLineStartX, mvtLineStartY, mvtLineFinishX, mvtLineFinishY) {
+	drawPlayer1();
+	drawPlayer2();
+	drawCentralLine();
+	drawScores();
+	generateBall(circleX, circleY);
+	setBallFirstLineMvt(mvtLineStartX, mvtLineStartY, mvtLineFinishX, mvtLineFinishY);
+}
+
 
 function drawCentralLine() {
 	context.beginPath();
@@ -55,9 +61,7 @@ function drawScores() {
 	context.fillText("0", canvasWidth / 2 + 10, 20);
 }
 
-function generateBall() {
-	const x = canvasGame.width / 2;
-	const y = Math.floor(Math.random() * (canvasGame.height + 1));
+function generateBall(x, y) {
 	const radius = 5;
 
 	context.beginPath();
@@ -65,30 +69,31 @@ function generateBall() {
 	context.lineWidth = 2;
 	context.arc(x, y, radius, 0, 2 * Math.PI);
 	context.stroke();
-	
-	return y;
 }
 
-function setBallFirstLineMvt() {
-	const startX = canvasGame.width / 2;
-	const startY = generateBall();
-	const finishY = Math.floor(Math.random() * (canvasGame.height + 1));
-	const finishX = (finishY === 0 || finishY === canvasGame.height) ? Math.floor(Math.random() * (startX + 1)) : 0;
-
+function setBallFirstLineMvt(startX, startY, finishX, finishY) {
 	context.beginPath();
 	context.strokeStyle = "yellow";
 	context.lineWidth = 2;
 	context.moveTo(startX, startY);
 	context.lineTo(finishX, finishY);
 	context.stroke();
-
-	return { startY, finishX, finishY };
 }
 
-function moveBall() {
-	const cood = setBallFirstLineMvt();
-	let x = canvasGame.width / 2;
-	let y = cood.startY;
+async function moveBall() {
+	let circleX = Math.floor(canvasGame.width / 2);
+	let circleY = Math.floor(Math.random() * (canvasGame.height + 1));
+	const mvtLineStartX = circleX;
+	const mvtLineStartY = circleY;
+	const mvtLineFinishY = Math.floor(Math.random() * (canvasGame.height + 1)); 
+	const mvtLineFinishX = (mvtLineFinishY === 0 || mvtLineFinishY === canvasGame.height) ? Math.floor(Math.random() * (mvtLineStartX + 1)) : 0;
+	const delay = ms => new Promise(res => setTimeout(res, ms));
 
-	// while
+	while (circleX !== mvtLineFinishX || circleY !== mvtLineFinishY) {
+		context.clearRect(0, 0, canvasWidth, canvasHeight);
+		drawEverything(circleX, circleY, mvtLineStartX, mvtLineStartY, mvtLineFinishX, mvtLineFinishY);
+		if (circleX !== mvtLineFinishX) circleX > mvtLineFinishX ? circleX-- : circleX++;
+		if (circleY !== mvtLineFinishY) circleY > mvtLineFinishY ? circleY-- : circleY++;
+		await delay(100)
+	}
 }
