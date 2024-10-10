@@ -1,3 +1,6 @@
+// TODO: refactor the code and seperate each function
+// Make the yellow line invisible (only calculate destination coordoonates)
+
 const canvasGame = document.getElementById("game-canvas");
 const canvasHeight = canvasGame.height;
 const canvasWidth = canvasGame.width;
@@ -90,10 +93,12 @@ async function moveBall() {
 	const delay = ms => new Promise(res => setTimeout(res, ms));
 
 	while (circleX !== mvtLineFinishX || circleY !== mvtLineFinishY) {
+		const stepY = (mvtLineFinishY - mvtLineStartY) / (mvtLineFinishX - mvtLineStartX);
+
 		context.clearRect(0, 0, canvasWidth, canvasHeight);
 		drawEverything(circleX, circleY, mvtLineStartX, mvtLineStartY, mvtLineFinishX, mvtLineFinishY);
 		if (circleX !== mvtLineFinishX) circleX > mvtLineFinishX ? circleX-- : circleX++;
-		if (circleY !== mvtLineFinishY) circleY > mvtLineFinishY ? circleY-- : circleY++;
-		await delay(100)
+		if (Math.floor(circleY) !== mvtLineFinishY && Math.ceil(circleY) !== mvtLineFinishY) circleY -= stepY;
+		await delay(50)
 	}
 }
