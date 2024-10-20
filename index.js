@@ -1,5 +1,7 @@
-// fix: x and y coordinates of the ball being decimal
-// TODO: check if the detection of a player touching the ball works correctly
+// fix: decimal numbers problem
+// fix: second player going beyond the canvas 
+// TODO: add recording ball direction (left or right) and change the stepY value accordignly
+// ! Seperate the code into different files (this file getting to big)
 
 const canvasGame = document.getElementById("game-canvas");
 const canvasHeight = canvasGame.height;
@@ -53,7 +55,7 @@ class PingPong {
 		
 	generateBall() {
 		context.beginPath();
-		context.strokeStyle = "green";
+		context.strokeStyle = "white";
 		context.lineWidth = 2;
 		context.arc(this.ballCurrentX, this.ballCurrentY, this.ballRadius, 0, 2 * Math.PI);
 		context.stroke();
@@ -70,13 +72,27 @@ class PingPong {
 
 	async moveBall() {
 		while (this.ballCurrentX !== this.ballDestinationX || (Math.floor(this.ballCurrentY) !== this.ballDestinationY && Math.ceil(this.ballCurrentY) !== this.ballDestinationY)) {
-			if (this.detectBall(1)) this.generateTrajectory(); 
+			console.log(this.ballCurrentY);
 			const stepY = (this.ballDestinationY - this.ballCurrentY) / (this.ballDestinationX - this.ballCurrentX);
-			this.detectBall();
 			this.drawEverything();
 			if (this.ballCurrentX !== this.ballDestinationX) this.ballCurrentX > this.ballDestinationX ? this.ballCurrentX-- : this.ballCurrentX++;
 			if (Math.floor(this.ballCurrentY) !== this.ballDestinationY && Math.ceil(this.ballCurrentY) !== this.ballDestinationY) this.ballCurrentY -= stepY;
+
+			if (this.didBallTouchPlayer(1)) break;
+			if (Math.floor(this.ballCurrentY) === 0 || Math.ceil(this.ballCurrentY) === 0) break;
+			if (Math.floor(this.ballCurrentY) === canvasHeight || Math.ceil(this.ballCurrentY) === canvasHeight) break;
 			await delay(50);
+		}
+		if (this.didBallTouchPlayer(1) || Math.floor(this.ballCurrentY) === 0 || Math.ceil(this.ballCurrentY) === 0 || Math.floor(this.ballCurrentY) === canvasHeight || Math.ceil(this.ballCurrentY) === canvasHeight) {
+			this.generateTrajectory();
+		} else {
+			this.changeScores();
+			this.ballCurrentY =  Math.floor(Math.random() * (canvasHeight + 1));
+                	this.ballDestinationY = Math.floor(Math.random() * (canvasHeight + 1));
+                	this.ballCurrentX = Math.floor(canvasWidth / 2);
+                	this.ballDestinationX = (this.ballDestinationY === 0 || this.ballDestinationY === canvasHeight) ? Math.floor(Math.random() * (this.ballCurrentX + 1)) : 0;
+			this.generateBall();
+			this.moveBall();
 		}
 	}
 
@@ -90,7 +106,7 @@ class PingPong {
 		this.drawEverything();	
 	}
 
-	detectBall(player) {
+	didBallTouchPlayer(player) {
 		const distanceX = 5 + this.ballRadius;
 		if (player === 1) {
 			if (Math.round(this.ballCurrentX - this.firstPlayerX) === distanceX && Math.abs(Math.round(this.ballCurrentY - this.firstPlayerY)) <= this.playerHeight) return true;
@@ -99,12 +115,18 @@ class PingPong {
 		}
 	}
 
-	generateTrajectory() {
-		const min = this.firstPlayerX + 5;
-		const max = canvasWidth;
-		this.ballDestinationX = (Math.random() * (max - min)) + min;
-		this.ballDestinationY = Math.round(Math.random()) ? canvasHeight : 0;
+	changeScores() {
+		if (Math.floor(this.ballCurrentX) === 0 || Math.ceil(this.ballCurrentX) === 0) this.scoreB++;
+		if (Math.floor(this.ballCurrentX) === canvasWidth || Math.ceil(this.ballCurrentX) === canvasWidth) this.scoreA++;
+		this.drawEverything();
 	}
+
+	generateTrajectory() {
+		this.ballDestinationX = Math.round(Math.random() * (canvasWidth - this.ballCurrentX) + this.ballCurrentX)
+		this.ballDestinationY = this.ballDestinationY === 0 ? canvasHeight : 0;
+		this.moveBall();
+	}
+	
 }
 
 const game = new PingPong();
