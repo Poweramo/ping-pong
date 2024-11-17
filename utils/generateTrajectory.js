@@ -1,4 +1,6 @@
 export default function generateTrajectory() {
-        ballDestinationX = Math.round((Math.random() * (canvasWidth - ballCurrentX)) + ballCurrentX)
+	const minAddedValue = 20;
+
+        ballDestinationX = Math.round((Math.random() * (canvasWidth - ballCurrentX)) + ballCurrentX) + minAddedValue;
         ballDestinationY = ballDestinationY === 0 ? canvasHeight : 0;
 }

@@ -13,8 +13,16 @@ export default async function moveBall() {
                 const stepY = (ballDestinationY - ballCurrentY) / (ballDestinationX - ballCurrentX);
                 drawEverything();
 
+		console.log(stepY, ballCurrentY, ballDestinationY)
+
                 if (ballCurrentX !== ballDestinationX) ballCurrentX > ballDestinationX ? ballCurrentX-- : ballCurrentX++;
-                if (Math.floor(ballCurrentY) !== ballDestinationY && Math.ceil(ballCurrentY) !== ballDestinationY) ballCurrentY > ballDestinationY ? ballCurrentY -= stepY : ballCurrentY += stepY;
+                if (Math.floor(ballCurrentY) !== ballDestinationY && Math.ceil(ballCurrentY) !== ballDestinationY) {
+			if (ballCurrentY > ballDestinationY) {
+				stepY >= 0 ? ballCurrentY -= stepY : ballCurrentY += stepY;
+			} else {
+				stepY >= 0 ? ballCurrentY += stepY : ballCurrentY -= stepY;
+			}
+		}
 
                 await delay(50);
         }
