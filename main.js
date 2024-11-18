@@ -1,8 +1,6 @@
-// TODO: export and import functions and variables
-// fix: decimal numbers problem
-// TODO: make bouncing logical not random and make a limit for the ball in the part of the second player
-// TODO: make the game work for the second player
-// fix: second player going beyond the canvas 
+// TODO: fix second player going beyond the canvas 
+// TODO: make the ball bounce when touching borders (code in generateRandomTrajectory.js)
+// TODO: make the ball fast
 
 window.canvasGame = document.getElementById("game-canvas");
 window.canvasHeight = canvasGame.height;
