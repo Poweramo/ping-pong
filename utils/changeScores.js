@@ -1,7 +1,9 @@
 import drawEverything from "./drawEverything.js";
+import didBallTouchSide from "./didBallTouchSide.js";
 
 export default function changeScores() {
-        if (Math.floor(ballCurrentX) === 0 || Math.ceil(ballCurrentX) === 0) scoreB++;
-        if (Math.floor(ballCurrentX) === canvasWidth || Math.ceil(ballCurrentX) === canvasWidth) scoreA++;
+	const side = didBallTouchSide();
+
+        side === 1 ? scoreB++ : scoreA++;
         drawEverything();
 }
