@@ -1,5 +1,6 @@
 // TODO: fix second player going beyond the canvas 
 // TODO: make the ball bounce when touching borders (code in generateRandomTrajectory.js)
+// Fix: ball not bouncing correctly of a player
 // TODO: make the ball fast
 
 window.canvasGame = document.getElementById("game-canvas");
