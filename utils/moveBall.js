@@ -10,7 +10,7 @@ import didBallTouchBorder from "./didBallTouchBorder.js";
 export default async function moveBall() {
         while (ballCurrentX !== ballDestinationX || (Math.floor(ballCurrentY) !== ballDestinationY && Math.ceil(ballCurrentY) !== ballDestinationY)) {
                 if (didBallTouchSide()) break;
-		if (didBallTouchPlayer() || didBallTouchSide()) generateRandomTrajectory(ballDirection);
+		if (didBallTouchPlayer() || didBallTouchBorder()) generateRandomTrajectory(ballDirection);
 
                 const stepY = Math.abs((ballDestinationY - ballCurrentY) / (ballDestinationX - ballCurrentX));
                 drawEverything();
