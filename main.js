@@ -38,12 +38,20 @@ window.addEventListener("keydown", (e) => {
 	switch (e.key) {
 		case "ArrowUp":
 			if (firstPlayerY >= playerHeight) {
-				ballCurrentX <= canvasWidth / 2 ? movePlayer(1, "-") : movePlayer(2, "-");
+				if (ballCurrentX <= canvasWidth / 2) movePlayer(1, "-");
+			}
+
+			if (secondPlayerY >= playerHeight) {
+				if (ballCurrentX > canvasWidth / 2) movePlayer(2, "-");
 			}
 			break;
 		case "ArrowDown":
 			if (firstPlayerY <= canvasHeight - playerHeight) {
-				ballCurrentX <= canvasWidth / 2 ? movePlayer(1, "+") : movePlayer(2, "+");
+				if (ballCurrentX <= canvasWidth / 2) movePlayer(1, "+");
+			}
+
+			if (secondPlayerY <= canvasHeight - playerHeight) {
+				if (ballCurrentX > canvasWidth / 2) movePlayer(2, "+");
 			}
 			break;
 		default:
