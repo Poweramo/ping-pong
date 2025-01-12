@@ -20,6 +20,7 @@ window.firstPlayerY = canvasHeight / 2;
 window.secondPlayerY = canvasHeight / 2;
 window.scoreA = 0;
 window.scoreB = 0;
+window.speedFactor = 5;
 
 import drawCentralLine from "./utils/drawCentralLine.js";
 import drawScores from "./utils/drawScores.js";
