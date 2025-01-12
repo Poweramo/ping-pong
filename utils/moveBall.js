@@ -13,10 +13,10 @@ export default async function moveBall() {
 		if (didBallTouchPlayer()) generateRandomTrajectory(ballDirection);
 		if (didBallTouchBorder()) generateRandomTrajectory(ballDirection);
 
-                const stepY = Math.abs((ballDestinationY - ballCurrentY) / ((ballDestinationX - ballCurrentX)));
+                const stepY = Math.abs((ballDestinationY - ballCurrentY) / ((ballDestinationX - ballCurrentX) + speedFactor));
                 drawEverything();
 
-                if (ballCurrentX !== ballDestinationX) ballCurrentX > ballDestinationX ? ballCurrentX-- : ballCurrentX++;
+                if (ballCurrentX !== ballDestinationX) ballCurrentX > ballDestinationX ? ballCurrentX -= speedFactor: ballCurrentX += speedFactor;
                 if (Math.floor(ballCurrentY) !== ballDestinationY && Math.ceil(ballCurrentY) !== ballDestinationY) {
 			ballCurrentY > ballDestinationY ? ballCurrentY -= stepY : ballCurrentY += stepY;
 		}
