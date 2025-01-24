@@ -7,7 +7,7 @@ export default function generateRandomTrajectory(direction) {
 		ballDestinationX = Math.round(Math.random() * (canvasWidth - ballCurrentX) + ballCurrentX);
 	}
 
-	if (Math.floor(ballDestinationX) === 0 || Math.floor(ballDestinationX) === canvasWidth) {
+	if (ballDestinationX === 0 || ballDestinationX === canvasWidth) {
 		ballDestinationY = Math.random() * canvasHeight;
 		ballDestinationY = Math.round(ballDestinationY);
 	} else {
