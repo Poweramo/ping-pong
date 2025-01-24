@@ -1,6 +1,5 @@
-// TODO: fix second player going beyond the canvas 
-// TODO: fix the ball bounce to the wrong direction when touching borders
-// TODO: make the ball fast
+// Fix: ball touching the border and not bouncing (instead it counts as a goal)
+// Fix: ball bouncing on a border too fast and it counts as a goal when the ball touches the other border
 
 window.canvasGame = document.getElementById("game-canvas");
 window.canvasHeight = canvasGame.height;
