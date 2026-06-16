@@ -2,10 +2,8 @@ import drawEverything from "./drawEverything.js";
 import didBallTouchSide from "./didBallTouchSide.js";
 import didBallTouchBorder from "./didBallTouchBorder.js";
 import changeScores from "./changeScores.js";
-import generateStartingTrajectory from "./generateStartingTrajectory.js";
 import didBallTouchPlayer from "./didBallTouchPlayer.js";
-import generateRandomTrajectory from "./generateRandomTrajectory.js";
-import generateBall from "./generateBall.js";
+import drawBall from "./drawBall.js";
 
 export default async function moveBall(isDirectionLeft, isDirectionUp) {
 	let directionXSign = 1;
@@ -14,8 +12,8 @@ export default async function moveBall(isDirectionLeft, isDirectionUp) {
 	let trajectoryAngle = Math.PI * 0.5 * Math.random();
 	let gameStartTimeInSeconds = Temporal.Now.instant().epochMilliseconds * (10 ** -3);
 
-	if (!isDirectionLeft()) directionXSign *= -1;
-	if (!isDirectionUp()) directionYSign *= -1;
+	if (!isDirectionLeft) directionXSign *= -1;
+	if (!isDirectionUp) directionYSign *= -1;
 	while (true) {
 		let nowInSeconds = Temporal.Now.instant().epochMilliseconds * (10 ** -3);
 		let pastTimeInSeconds = nowInSeconds - gameStartTimeInSeconds;
@@ -27,7 +25,7 @@ export default async function moveBall(isDirectionLeft, isDirectionUp) {
 
 		if (didBallTouchSide()) {
 			changeScores();
-			generateBall();
+			drawBall();
 			ballCurrentX = Math.floor(canvasWidth / 2);
 			ballCurrentY =  Math.floor(Math.random() * (canvasHeight + 1));
 			break;

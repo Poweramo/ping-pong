@@ -1,4 +1,4 @@
-export default function generateBall() {
+export default function drawBall() {
         context.beginPath();
         context.strokeStyle = "white";
         context.lineWidth = 2;

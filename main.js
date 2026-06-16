@@ -24,7 +24,7 @@ window.speedFactor = 1;
 import drawCentralLine from "./utils/drawCentralLine.js";
 import drawScores from "./utils/drawScores.js";
 import drawPlayer from "./utils/drawPlayer.js";
-import generateBall from "./utils/generateBall.js";
+import drawBall from "./utils/drawBall.js";
 import moveBall from "./utils/moveBall.js";
 import movePlayer from "./utils/movePlayer.js";
 
@@ -32,8 +32,8 @@ drawCentralLine();
 drawScores();
 drawPlayer(firstPlayerX, firstPlayerY);
 drawPlayer(secondPlayerX, secondPlayerY);
-generateBall();
-moveBall();
+drawBall();
+moveBall(true, true);
 window.addEventListener("keydown", (e) => {
 	switch (e.key) {
 		case "ArrowUp":
