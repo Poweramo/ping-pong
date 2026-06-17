@@ -1,7 +1,7 @@
-export default function didBallTouchPlayer(player) {
+export default function didBallTouchPlayer(ballX, ballY) {
         const distanceX = 5 + ballRadius;
 
-        if ((Math.abs(ballCurrentX - firstPlayerX) <= distanceX) && (Math.abs(ballCurrentY - firstPlayerY) <= playerHeight)) return true;
-        if ((Math.abs(ballCurrentX - secondPlayerX) <= distanceX) && (Math.abs(ballCurrentY - secondPlayerY) <= playerHeight)) return true;
+        if ((Math.abs(ballX - firstPlayerX) <= distanceX) && (Math.abs(ballY - firstPlayerY) <= playerHeight)) return true;
+        if ((Math.abs(ballX - secondPlayerX) <= distanceX) && (Math.abs(ballY - secondPlayerY) <= playerHeight)) return true;
 	return false;
 }

@@ -1,7 +1,7 @@
-export default function didBallTouchBorder() {
+export default function didBallTouchBorder(ballY) {
 	const distanceY = ballRadius;
 
-        if (ballCurrentY <= distanceY) return true;
-        if (ballCurrentY >= (canvasHeight - distanceY)) return true;
+        if (ballY <= distanceY) return true;
+        if (ballY >= (canvasHeight - distanceY)) return true;
 	return false;
 }

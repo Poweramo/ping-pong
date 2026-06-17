@@ -1,7 +1,6 @@
 import drawEverything from "./drawEverything.js";
-import didBallTouchSide from "./didBallTouchSide.js";
 
-export default function changeScores() {
-        ballDirection === "right" ? scoreB++ : scoreA++;
-        drawEverything();
+export default function changeScores(ballX, ballY, isDirectionLeft) {
+	isDirectionLeft ? scoreA++ : scoreB++;
+        drawEverything(ballX, ballY);
 }

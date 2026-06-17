@@ -4,42 +4,40 @@ import didBallTouchBorder from "./didBallTouchBorder.js";
 import changeScores from "./changeScores.js";
 import didBallTouchPlayer from "./didBallTouchPlayer.js";
 import drawBall from "./drawBall.js";
+import getPlayerInput from "./getPlayerInput.js";
 
-export default async function moveBall(isDirectionLeft, isDirectionUp) {
+export default async function moveBall(ballX, ballY, isDirectionLeft, isDirectionDown, nowInSeconds, gameStartTimeInSeconds) {
 	let directionXSign = 1;
 	let directionYSign = 1;
 	let speedModule = 1;
 	let trajectoryAngle = Math.PI * 0.5 * Math.random();
-	let gameStartTimeInSeconds = Temporal.Now.instant().epochMilliseconds * (10 ** -3);
+	let pastTimeInSeconds = nowInSeconds - gameStartTimeInSeconds;
 
 	if (!isDirectionLeft) directionXSign *= -1;
-	if (!isDirectionUp) directionYSign *= -1;
-	while (true) {
-		let nowInSeconds = Temporal.Now.instant().epochMilliseconds * (10 ** -3);
-		let pastTimeInSeconds = nowInSeconds - gameStartTimeInSeconds;
-        	drawEverything();
-		ballCurrentX += Math.round(directionXSign * speedModule * Math.cos(trajectoryAngle) * pastTimeInSeconds);
-		ballCurrentY += Math.round(directionYSign * speedModule * Math.sin(trajectoryAngle) * pastTimeInSeconds);
+	if (!isDirectionDown) directionYSign *= -1;
 
-		if (didBallTouchBorder()) directionYSign *= -1;
+	console.log("pastTime: ", pastTimeInSeconds);
+        drawEverything(ballX, ballY);
+	ballX += directionXSign * speedModule * Math.cos(trajectoryAngle) * pastTimeInSeconds;
+	ballY += directionYSign * speedModule * Math.sin(trajectoryAngle) * pastTimeInSeconds;
+	console.log(ballX, ballY);
 
-		if (didBallTouchSide()) {
-			changeScores();
-			drawBall();
-			ballCurrentX = Math.floor(canvasWidth / 2);
-			ballCurrentY =  Math.floor(Math.random() * (canvasHeight + 1));
-			break;
-		}
-		if (didBallTouchPlayer()) {
-			directionXSign *= -1;
-			break;
-		}
-		await delay(20);
-	}
-
-	if (directionXSign == 1) {
-		directionYSign == 1 ? moveBall(true, true) : moveBall(true, false);
+	await delay(10);
+	if (didBallTouchBorder(ballY)) {
+		ballY -= directionYSign * ballRadius;
+		isDirectionDown = !isDirectionDown;
+		await moveBall(ballX, ballY, isDirectionLeft, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
+	} else if (didBallTouchSide(ballX)) {
+		changeScores(isDirectionLeft);
+		drawBall(ballX, ballY);
+		ballX = canvasWidth / 2;
+		ballY =  Math.random() * (canvasHeight + 1);
+		await moveBall(ballX, ballY, isDirectionLeft, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
+	} else if (didBallTouchPlayer(ballX, ballY)) {
+		ballX -= directionXSign * (ballRadius + 5);
+		isDirectionLeft = !isDirectionLeft;
+		await moveBall(ballX, ballY, isDirectionLeft, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3),Temporal.Now.instant().epochMilliseconds * (10 ** -3));
 	} else {
-		directionYSign == 1 ? moveBall(false, true) : moveBall(false, false);
+		await moveBall(ballX, ballY, isDirectionLeft, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), gameStartTimeInSeconds);
 	}
 }

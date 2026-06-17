@@ -1,6 +1,6 @@
-export default function didBallTouchSide() {
+export default function didBallTouchSide(ballX) {
 	const distanceX = ballRadius + 5;
 
-        if ((ballCurrentX <= distanceX) || (ballCurrentX >= canvasWidth - distanceX)) return true;
+        if ((ballX <= distanceX) || (ballX >= canvasWidth - distanceX)) return true;
 	return false;
 }
