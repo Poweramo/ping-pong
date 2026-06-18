@@ -57,7 +57,7 @@ function getPlayerInput(event) {
 		changeScores(ballX, ballY, isDirectionRight);
 		drawBall(ballX, ballY);
 		ballX = canvasWidth / 2;
-		ballY =  Math.random() * (canvasHeight + 1);
+		ballY =  ballRadius + Math.random() * (canvasHeight - 2 * ballRadius);
 		await moveBall(ballX, ballY, isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
 	} else if (didBallTouchPlayer(ballX, ballY)) {
 		ballX -= directionXSign * (ballRadius + 5);
