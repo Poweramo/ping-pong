@@ -1,68 +1,71 @@
 import drawEverything from "./drawEverything.js";
 import didBallTouchSide from "./didBallTouchSide.js";
 import didBallTouchBorder from "./didBallTouchBorder.js";
-import changeScores from "./changeScores.js";
 import didBallTouchPlayer from "./didBallTouchPlayer.js";
 import drawBall from "./drawBall.js";
-import movePlayer from "./movePlayer.js";
 
-export default async function moveBall(ballX, ballY, isDirectionRight, isDirectionDown, nowInSeconds, gameStartTimeInSeconds) {
-function getPlayerInput(event) {
+
+export default async function moveBall(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB, isDirectionRight, isDirectionDown, nowInSeconds, gameStartTimeInSeconds) {
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+	const canvasGame = document.getElementById("game-canvas");
+	const canvasHeight = canvasGame.height;
+	const canvasWidth = canvasGame.width;
+const ballRadius = 5;
+	const playerHeight = 15;
+
+function movePlayer(event) {
 	if (event.type === "keydown") {		
+		const speedFactor= 1;
 		switch (event.key) {
 			case "ArrowUp":
-				if (firstPlayerY >= playerHeight) {
-					if (ballX <= canvasWidth / 2) movePlayer(1, "-");
-				}
-
-				if (secondPlayerY >= playerHeight) {
-					if (ballX > canvasWidth / 2) movePlayer(2, "-");
-				}
+				if (firstPlayerY >= playerHeight && ballX <= canvasWidth / 2) firstPlayerY -= speedFactor;
+				if (secondPlayerY >= playerHeight && ballX > canvasWidth / 2) secondPlayerY -= speedFactor;
 				break;
 			case "ArrowDown":
-				if (firstPlayerY <= canvasHeight - playerHeight) {
-					if (ballX <= canvasWidth / 2) movePlayer(1, "+");
-				}
-
-				if (secondPlayerY <= canvasHeight - playerHeight) {
-					if (ballX > canvasWidth / 2) movePlayer(2, "+");
-				}
+				if (firstPlayerY <= canvasHeight - playerHeight && ballX <= canvasWidth / 2) firstPlayerY += speedFactor;
+				if (secondPlayerY <= canvasHeight - playerHeight && ballX > canvasWidth / 2) secondPlayerY += speedFactor;
 				break;
 			default:
 				break;
 			}
 	}
 }
+	const speedModule = 1;
+	const trajectoryAngle = Math.PI * 0.5 * Math.random();
+	const pastTimeInSeconds = nowInSeconds - gameStartTimeInSeconds;
 	let directionXSign = 1;
 	let directionYSign = 1;
-	let speedModule = 1;
-	let trajectoryAngle = Math.PI * 0.5 * Math.random();
-	let pastTimeInSeconds = nowInSeconds - gameStartTimeInSeconds;
 
 	if (!isDirectionRight) directionXSign *= -1;
 	if (!isDirectionDown) directionYSign *= -1;
 
-	window.addEventListener("keydown", getPlayerInput);
-        drawEverything(ballX, ballY);
+	window.addEventListener("keydown", movePlayer);
+        drawEverything(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB);
 	ballX += directionXSign * speedModule * Math.cos(trajectoryAngle) * pastTimeInSeconds;
 	ballY += directionYSign * speedModule * Math.sin(trajectoryAngle) * pastTimeInSeconds;
 	console.log(ballX, ballY);
 
 	await delay(10);
-	window.removeEventListener("keydown", getPlayerInput);
+	window.removeEventListener("keydown", movePlayer);
 	if (didBallTouchBorder(ballY)) {
 		ballY -= directionYSign * ballRadius;
-		await moveBall(ballX, ballY, isDirectionRight, !isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
+		await moveBall(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB, isDirectionRight, !isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
 	} else if (didBallTouchSide(ballX)) {
-		changeScores(ballX, ballY, isDirectionRight);
-		drawBall(ballX, ballY);
+
+		if (isDirectionRight) {
+			scoreA++;
+		} else {
+			scoreB++;
+		}
+		drawEverything(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB);
 		ballX = canvasWidth / 2;
 		ballY =  ballRadius + Math.random() * (canvasHeight - 2 * ballRadius);
-		await moveBall(ballX, ballY, isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
-	} else if (didBallTouchPlayer(ballX, ballY)) {
+		await moveBall(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB, isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), Temporal.Now.instant().epochMilliseconds * (10 ** -3));
+	} else if (didBallTouchPlayer(ballX, ballY, firstPlayerY, secondPlayerY)) {
 		ballX -= directionXSign * (ballRadius + 5);
-		await moveBall(ballX, ballY, !isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3),Temporal.Now.instant().epochMilliseconds * (10 ** -3));
+		await moveBall(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB, !isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3),Temporal.Now.instant().epochMilliseconds * (10 ** -3));
 	} else {
-		await moveBall(ballX, ballY, isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), gameStartTimeInSeconds);
+		await moveBall(ballX, ballY, firstPlayerY, secondPlayerY, scoreA, scoreB, isDirectionRight, isDirectionDown, Temporal.Now.instant().epochMilliseconds * (10 ** -3), gameStartTimeInSeconds);
 	}
 }
